@@ -1,10 +1,12 @@
 package com.example.SpringLearnH2db.Services;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
-
 import com.example.SpringLearnH2db.Dto.EmployeeDto;
 import com.example.SpringLearnH2db.Entitys.EmployeeEntity;
 import com.example.SpringLearnH2db.Repositories.EmployeeRepository;
@@ -37,20 +39,57 @@ public class EmployeesService {
     }
 
 
-    public EmployeeDto getEmployeeById(Long id) {
+    public Optional<EmployeeDto> getEmployeeById(Long id) {
        
-        return employeeRepository.findById(id)
-        .map(employeeEntity -> modelmapper.map(employeeEntity, EmployeeDto.class))
-        .orElse(null); // or handle as appropriate
+        Optional<EmployeeEntity> EmployeeEntity = employeeRepository.findById(id);
+       return EmployeeEntity.map( EmployeeEntity1-> modelmapper.map(EmployeeEntity1, EmployeeDto.class));
+
     }
 
-    public EmployeeDto CreateEmployee(EmployeeEntity employeeEntity) {
+    public EmployeeDto CreateEmployee(EmployeeDto EmployeeDto) {
        
-           employeeEntity = employeeRepository.save(employeeEntity);
-           return modelmapper.map(employeeEntity, EmployeeDto.class);
-        
+       EmployeeEntity employeeEntity = modelmapper.map(EmployeeDto, EmployeeEntity.class);
+       EmployeeEntity employeeSavedEntity = employeeRepository.save(employeeEntity);
+        return modelmapper.map(employeeSavedEntity,EmployeeDto.getClass());
 
    }
 
-  
-}
+
+    public EmployeeDto updateEmployeeById(Long id, EmployeeDto EmployeeDto) {
+       
+        EmployeeEntity employeeEntity = modelmapper.map(EmployeeDto, EmployeeEntity.class);
+        employeeEntity.setId(id);
+        EmployeeEntity employeeSavedEntity = employeeRepository.save(employeeEntity);
+        return modelmapper.map(employeeSavedEntity,EmployeeDto.getClass());
+
+    }
+
+    public boolean IsEmployeeExists(Long Id){
+        return employeeRepository.existsById(Id);
+    }
+
+
+    public Boolean deleteEmployeeById(Long id) {
+
+        if (!IsEmployeeExists(id)) return false;
+        employeeRepository.deleteById(id);
+        return true;
+    }
+
+
+    public EmployeeDto partialupdateemployeeById(Long id, Map<String, Object> patchMapUpdate) {
+        if (!IsEmployeeExists(id)) return null;
+        EmployeeEntity EmployeeEntity = employeeRepository.findById(id).get();
+      
+        patchMapUpdate.forEach((Field,Value)->{
+           Field UpdatedFiled = ReflectionUtils.findRequiredField(EmployeeEntity.getClass(), Field);
+            UpdatedFiled.setAccessible(true);
+            ReflectionUtils.setField(UpdatedFiled, EmployeeEntity, Value);
+        });
+         return modelmapper.map(employeeRepository.save(EmployeeEntity), EmployeeDto.class);
+
+        }
+        
+    }
+
+

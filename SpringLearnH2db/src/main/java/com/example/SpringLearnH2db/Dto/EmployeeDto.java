@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 public class EmployeeDto {
 
-    private Long Id;
-    private String Name;
-    private String Email;
-    private Integer Age;
-    private LocalDate DateOfBirth;
-    private Boolean IsActive;
+    private Long id;
+    private String name;
+    private String email;
+    private Integer age;
+    private LocalDate dateOfBirth;
+    private Boolean isActive;
 
 }
