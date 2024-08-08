@@ -1,6 +1,5 @@
 package com.example.SpringLearnH2db.Services;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -30,20 +29,19 @@ public class EmployeesService {
     public List<EmployeeDto> getAllEmployee() {
 
        List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
-       return employeeEntities
+          return employeeEntities
                     .stream()
-                    .map(EmployeeEntity -> modelmapper.map(employeeEntities,EmployeeDto.class))
-                    .collect(Collectors.toList());
-            
+                    .map(EmployeeEntity -> modelmapper.map(EmployeeEntity,EmployeeDto.class))
+                    .collect(Collectors.toList());            
        
     }
 
 
     public EmployeeDto getEmployeeById(Long id) {
        
-         Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(id);
-         return modelmapper.map(employeeEntity, EmployeeDto.class);
-
+        return employeeRepository.findById(id)
+        .map(employeeEntity -> modelmapper.map(employeeEntity, EmployeeDto.class))
+        .orElse(null); // or handle as appropriate
     }
 
     public EmployeeDto CreateEmployee(EmployeeEntity employeeEntity) {

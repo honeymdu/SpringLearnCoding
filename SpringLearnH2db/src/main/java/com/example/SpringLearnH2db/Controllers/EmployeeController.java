@@ -3,6 +3,7 @@ package com.example.SpringLearnH2db.Controllers;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/getemployee/{Id}")
-    public EmployeeDto getEmployees(Long Id) {
+    public EmployeeDto getEmployees(@PathVariable Long Id) {
         return employeesService.getEmployeeById(Id);
     }
 
