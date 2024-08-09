@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.SpringLearnH2db.Dto.EmployeeDto;
 import com.example.SpringLearnH2db.Services.EmployeesService;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -45,7 +47,7 @@ public class EmployeeController {
 
 
     @PostMapping("/addemployee")
-    public ResponseEntity<EmployeeDto> CreateEmployee(@RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<EmployeeDto> CreateEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
         EmployeeDto employeeSavedDto = employeesService.CreateEmployee(employeeDto);
         return new ResponseEntity<>(employeeSavedDto,HttpStatus.CREATED);
     }
