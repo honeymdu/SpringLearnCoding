@@ -2,6 +2,9 @@ package com.example.SpringLearnH2db.Dto;
 
 import java.time.LocalDate;
 
+import com.example.SpringLearnH2db.Annotations.EmployeeAgeValidation;
+import com.example.SpringLearnH2db.Annotations.EmployeeRoleValidation;
+
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -43,6 +46,7 @@ public class EmployeeDto {
     @NotNull
     @Max(value = 45,message = "Age of Employee Can not be more then 45")
     @Min(value = 18,message = "Age of Employee Can not be more then 18")
+    //@EmployeeAgeValidation
     private Integer age;
 
     @PastOrPresent(message = "date of birth should not be in the Future")
@@ -54,7 +58,8 @@ public class EmployeeDto {
     private Boolean isActive;
 
     @NotBlank
-    @Pattern(regexp = "^(ADMIN|USER)$",message = "Role for Employee Can be ADMIN or USER only")
+    //@Pattern(regexp = "^(ADMIN|USER)$",message = "Role for Employee Can be ADMIN or USER only")
+    @EmployeeRoleValidation
     private String role;
 
     @NotNull(message = "salary of Employee can not be Null")
