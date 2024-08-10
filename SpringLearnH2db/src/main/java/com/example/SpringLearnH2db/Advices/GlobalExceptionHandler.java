@@ -28,25 +28,25 @@ public class GlobalExceptionHandler {
 
     //Handle User-deinfed Exception 'ResourceNotFoundException' globally
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handelResourceNotFoundException(ResourceNotFoundException exception){
+    public ResponseEntity<ApiResponce<?>> handelResourceNotFoundException(ResourceNotFoundException exception){
         ApiError apiError = ApiError.builder()
         .httpStatus(HttpStatus.NOT_FOUND)
         .message(exception.getMessage())
         .build();
-        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+        return buildErrorResponceEntity(apiError);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handelInternalServerError(Exception exception){
+    public ResponseEntity<ApiResponce<?>> handelInternalServerError(Exception exception){
         ApiError apiError = ApiError.builder()
         .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
         .message(exception.getMessage())
         .build();
-        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorResponceEntity(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handelInputValidationError(MethodArgumentNotValidException exception){
+    public ResponseEntity<ApiResponce<?>> handelInputValidationError(MethodArgumentNotValidException exception){
 
         List<String> errors = exception
                 .getBindingResult()
@@ -59,10 +59,13 @@ public class GlobalExceptionHandler {
         .httpStatus(HttpStatus.BAD_REQUEST)
         .message(errors.toString())
         .build();
-        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+        return buildErrorResponceEntity(apiError);
     }
 
+    private ResponseEntity<ApiResponce<?>> buildErrorResponceEntity(ApiError apiError){
+        return new ResponseEntity<>( new ApiResponce<>(apiError),apiError.getHttpStatus());
 
+    }
 
 
 
