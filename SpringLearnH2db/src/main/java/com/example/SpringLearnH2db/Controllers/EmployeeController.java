@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringLearnH2db.Dto.EmployeeDto;
+import com.example.SpringLearnH2db.Exceptions.ResourceNotFoundException;
 import com.example.SpringLearnH2db.Services.EmployeesService;
 
 import jakarta.validation.Valid;
@@ -37,13 +38,24 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDto>> getEmployees() {
         return ResponseEntity.ok(employeesService.getAllEmployee());
     }
+    // Predefined Exception handeles e.g : NoSuchElementException
+    // @GetMapping("/getemployee/{Id}")
+    // public ResponseEntity<EmployeeDto> getEmployeesById(@PathVariable Long Id) {
+    //     Optional<EmployeeDto> employeeDto = employeesService.getEmployeeById(Id);
+    //     return  employeeDto
+    //             .map( employeeDto1 ->ResponseEntity.ok(employeeDto1))
+    //             .orElseThrow(() -> new NoSuchElementException("Element Not Found"));
+    // }
 
+    // user-defined Exception handeles e.g : ResourceNotFoundException
     @GetMapping("/getemployee/{Id}")
-    public ResponseEntity<EmployeeDto> getEmployees(@PathVariable Long Id) {
+    public ResponseEntity<EmployeeDto> getEmployeesById(@PathVariable Long Id) {
         Optional<EmployeeDto> employeeDto = employeesService.getEmployeeById(Id);
         return  employeeDto
-                .map( employeeDto1 ->ResponseEntity.ok(employeeDto1)).orElse(ResponseEntity.notFound().build());
+                .map( employeeDto1 ->ResponseEntity.ok(employeeDto1))
+                .orElseThrow(() -> new ResourceNotFoundException("Resource Not Found"));
     }
+
 
 
     @PostMapping("/addemployee")

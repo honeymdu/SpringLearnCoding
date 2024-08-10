@@ -1,0 +1,70 @@
+package com.example.SpringLearnH2db.Advices;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.example.SpringLearnH2db.Exceptions.ResourceNotFoundException;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+
+    //Handle Predeinfed Exception 'NoSuchElementException' globally
+    // @ExceptionHandler(NoSuchElementException.class)
+    // public ResponseEntity<ApiError> handelResourceNotFoundException(NoSuchElementException exception){
+    //     ApiError apiError = ApiError.builder()
+    //     .httpStatus(HttpStatus.NOT_FOUND)
+    //     .message("Resource Not Found")
+    //     .build();
+    //     return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    // }
+
+
+    //Handle User-deinfed Exception 'ResourceNotFoundException' globally
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handelResourceNotFoundException(ResourceNotFoundException exception){
+        ApiError apiError = ApiError.builder()
+        .httpStatus(HttpStatus.NOT_FOUND)
+        .message(exception.getMessage())
+        .build();
+        return new ResponseEntity<>(apiError,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handelInternalServerError(Exception exception){
+        ApiError apiError = ApiError.builder()
+        .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+        .message(exception.getMessage())
+        .build();
+        return new ResponseEntity<>(apiError,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handelInputValidationError(MethodArgumentNotValidException exception){
+
+        List<String> errors = exception
+                .getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(error ->error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        ApiError apiError = ApiError.builder()
+        .httpStatus(HttpStatus.BAD_REQUEST)
+        .message(errors.toString())
+        .build();
+        return new ResponseEntity<>(apiError,HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
+
+
+}

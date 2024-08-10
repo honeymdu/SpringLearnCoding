@@ -9,6 +9,7 @@ import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 import com.example.SpringLearnH2db.Dto.EmployeeDto;
 import com.example.SpringLearnH2db.Entitys.EmployeeEntity;
+import com.example.SpringLearnH2db.Exceptions.ResourceNotFoundException;
 import com.example.SpringLearnH2db.Repositories.EmployeeRepository;
 
 
@@ -57,6 +58,7 @@ public class EmployeesService {
 
     public EmployeeDto updateEmployeeById(Long id, EmployeeDto EmployeeDto) {
        
+        IsEmployeeExists(id);
         EmployeeEntity employeeEntity = modelmapper.map(EmployeeDto, EmployeeEntity.class);
         employeeEntity.setId(id);
         EmployeeEntity employeeSavedEntity = employeeRepository.save(employeeEntity);
@@ -65,7 +67,9 @@ public class EmployeesService {
     }
 
     public boolean IsEmployeeExists(Long Id){
-        return employeeRepository.existsById(Id);
+       Boolean IsEmployeeExists =employeeRepository.existsById(Id);
+        if (!IsEmployeeExists) throw new ResourceNotFoundException("Resource Not Found");
+        return true;
     }
 
 
@@ -78,9 +82,9 @@ public class EmployeesService {
 
 
     public EmployeeDto partialupdateemployeeById(Long id, Map<String, Object> patchMapUpdate) {
-        if (!IsEmployeeExists(id)) return null;
+        
+        IsEmployeeExists(id);
         EmployeeEntity EmployeeEntity = employeeRepository.findById(id).get();
-      
         patchMapUpdate.forEach((Field,Value)->{
            Field UpdatedFiled = ReflectionUtils.findRequiredField(EmployeeEntity.getClass(), Field);
             UpdatedFiled.setAccessible(true);

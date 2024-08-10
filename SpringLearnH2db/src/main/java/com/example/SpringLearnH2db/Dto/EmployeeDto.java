@@ -2,7 +2,7 @@ package com.example.SpringLearnH2db.Dto;
 
 import java.time.LocalDate;
 
-import com.example.SpringLearnH2db.Annotations.EmployeeAgeValidation;
+//import com.example.SpringLearnH2db.Annotations.EmployeeAgeValidation;
 import com.example.SpringLearnH2db.Annotations.EmployeeRoleValidation;
 
 import jakarta.validation.constraints.AssertTrue;
@@ -18,7 +18,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
+//import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 //import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
