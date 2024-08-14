@@ -10,4 +10,5 @@ public class SpringLearnH2dbApplication {
 		SpringApplication.run(SpringLearnH2dbApplication.class, args);
 	}
 
+	
 }

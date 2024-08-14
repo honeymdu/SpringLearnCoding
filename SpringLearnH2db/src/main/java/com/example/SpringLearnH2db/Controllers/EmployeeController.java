@@ -65,7 +65,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/updateemployee/{Id}")
-    public ResponseEntity<EmployeeDto> UpdateEmployee(@PathVariable Long Id ,@RequestBody EmployeeDto EmployeeDto) {
+    public ResponseEntity<EmployeeDto> UpdateEmployee(@PathVariable Long Id ,@RequestBody @Valid EmployeeDto EmployeeDto) {
         return ResponseEntity.ok(employeesService.updateEmployeeById(Id,EmployeeDto));
         
     }
