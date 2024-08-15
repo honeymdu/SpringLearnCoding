@@ -1,0 +1,1 @@
+INSERT INTO springlearn.product_table (price,quantity,sku,title_x) VALUES(12.4,4,'Parle1234','parle_Biscuit'),(16.4,5,'Parle1235','parle');
