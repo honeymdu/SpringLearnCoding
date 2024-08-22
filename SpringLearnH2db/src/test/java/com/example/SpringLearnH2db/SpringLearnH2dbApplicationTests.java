@@ -10,4 +10,6 @@ class SpringLearnH2dbApplicationTests {
 	void contextLoads() {
 	}
 
+	
+
 }
