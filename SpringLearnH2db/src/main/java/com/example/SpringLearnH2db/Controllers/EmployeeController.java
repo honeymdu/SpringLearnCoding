@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringLearnH2db.Dto.EmployeeDto;
+import com.example.SpringLearnH2db.Entitys.EmployeeEntity;
 import com.example.SpringLearnH2db.Exceptions.ResourceNotFoundException;
 import com.example.SpringLearnH2db.Services.EmployeesService;
 
@@ -58,10 +59,15 @@ public class EmployeeController {
 
 
 
+    // @PostMapping("/addemployee")
+    // public ResponseEntity<EmployeeDto> CreateEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
+    //     EmployeeDto employeeSavedDto = employeesService.CreateEmployee(employeeDto);
+    //     return new ResponseEntity<>(employeeSavedDto,HttpStatus.CREATED);
+    // }
+
     @PostMapping("/addemployee")
-    public ResponseEntity<EmployeeDto> CreateEmployee(@RequestBody @Valid EmployeeDto employeeDto) {
-        EmployeeDto employeeSavedDto = employeesService.CreateEmployee(employeeDto);
-        return new ResponseEntity<>(employeeSavedDto,HttpStatus.CREATED);
+    public ResponseEntity<EmployeeEntity> CreateEmployee(@RequestBody EmployeeEntity employeeEntity) {
+        return new ResponseEntity<>(employeesService.CreateEmployee(employeeEntity),HttpStatus.CREATED);
     }
 
     @PutMapping("/updateemployee/{Id}")
