@@ -6,15 +6,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Posts")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostEntity {
+@Getter
+@Setter
+public class PostEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +25,4 @@ public class PostEntity {
     private String title;
 
     private String description;
-
-
-    
-
 }
