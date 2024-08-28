@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "freecurrencyapi.base.url",
+    "type": "java.lang.String",
+    "description": "A description for 'freecurrencyapi.base.url'"
+  },
+  {
+    "name": "freecurrencyapi.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'freecurrencyapi.api.key'"
+  }
+]}
