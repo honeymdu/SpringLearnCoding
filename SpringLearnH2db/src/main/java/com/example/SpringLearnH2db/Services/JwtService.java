@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringLearnH2db.Entitys.User;
@@ -16,7 +17,7 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-
+    @Value("${jwt.secretkey}")
     private String JwtSecretKey;
 
     private SecretKey getSecretKey() {
