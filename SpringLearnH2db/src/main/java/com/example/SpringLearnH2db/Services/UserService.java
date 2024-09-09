@@ -28,7 +28,6 @@ public class UserService implements UserDetailsService {
 
   private final PasswordEncoder passwordEncoder;
 
-
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return userRepoisitory.findByEmail(username)
@@ -45,6 +44,11 @@ public class UserService implements UserDetailsService {
     tobeCreateuser.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
     return modelMapper.map(userRepoisitory.save(tobeCreateuser), UserDto.class);
 
+  }
+
+  public User getUserFromId(Long userId) {
+    return userRepoisitory.findById(userId)
+        .orElseThrow(() -> new ResourceNotFoundException("user not found with Id " + userId));
   }
 
 }

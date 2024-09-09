@@ -6,55 +6,60 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.SpringLearnH2db.Filters.JwtAuthFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     SecurityFilterChain SecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/posts/getAllPost").hasRole("USER")
-                        .requestMatchers("/employee/addemployee").hasRole("ADMIN")
+                       // .requestMatchers("/posts/getAllPost").hasRole("USER")
+                       // .requestMatchers("/employee/addemployee").hasRole("ADMIN")
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest()
                         .authenticated())
-                //.formLogin(Customizer.withDefaults())  // enable default login form
-                .csrf(csrfconfig -> csrfconfig.disable()) //to disable csrf token auth
-              //  .sessionManagement(sessionconfig -> sessionconfig
-                 //       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //to remove session mangement
+                // .formLogin(Customizer.withDefaults()) // enable default login form
+                .csrf(csrfconfig -> csrfconfig.disable()) // to disable csrf token auth
+                // .sessionManagement(sessionconfig -> sessionconfig
+                // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //to remove session
+                // mangement
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
 
-//     @Bean
-//     UserDetailsService InMemoryUserDetailService() {   //in memory Userdetails service for development only
+    // @Bean
+    // UserDetailsService InMemoryUserDetailService() { //in memory Userdetails
+    // service for development only
 
-//         UserDetails normalUser = User.withUsername("Himanshu")
-//                 .password(new BCryptPasswordEncoder()
-//                         .encode("password"))
-//                 .roles("USER").build();
+    // UserDetails normalUser = User.withUsername("Himanshu")
+    // .password(new BCryptPasswordEncoder()
+    // .encode("password"))
+    // .roles("USER").build();
 
-//         UserDetails adminUser = User.withUsername("admin")
-//                 .password(new BCryptPasswordEncoder()
-//                         .encode("admin"))
-//                 .roles("ADMIN").build();
+    // UserDetails adminUser = User.withUsername("admin")
+    // .password(new BCryptPasswordEncoder()
+    // .encode("admin"))
+    // .roles("ADMIN").build();
 
-//         return new InMemoryUserDetailsManager(normalUser, adminUser);
-//     }
+    // return new InMemoryUserDetailsManager(normalUser, adminUser);
+    // }
 
+  
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    AuthenticationManager getAuthenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
