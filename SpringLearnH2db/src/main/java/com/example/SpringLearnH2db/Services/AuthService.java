@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.example.SpringLearnH2db.Dto.JwtTokenDto;
 import com.example.SpringLearnH2db.Dto.LoginDto;
 import com.example.SpringLearnH2db.Entitys.User;
 
@@ -18,15 +19,27 @@ public class AuthService {
 
     private final JwtService jwtService;
 
-    public String Login(LoginDto loginDto) {
+    private final UserService userService;
+
+    public JwtTokenDto Login(LoginDto loginDto) {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(loginDto.getEmail(),
                 loginDto.getPassword());
         Authentication authenticated = authenticationManager.authenticate(authentication);
         User user = (User) authenticated.getPrincipal();
         authenticationManager.authenticate(authentication);
-        String token = jwtService.GenerateToken(user);
-        return token;
+        String Accesstoken = jwtService.GenerateAccessToken(user);
+        String Refreshtoken = jwtService.GenerateRefreshToken(user);
+        return JwtTokenDto.builder().refreshToken(Refreshtoken).accessToken(Accesstoken).id(user.getId()).build();
+
+    }
+
+    public JwtTokenDto refreshToken(String refreshToken) {
+        Long UserId = jwtService.getUserIdFromToken(refreshToken);
+        User user = userService.getUserFromId(UserId);
+        String Accesstoken = jwtService.GenerateAccessToken(user);
+        return JwtTokenDto.builder().accessToken(Accesstoken).refreshToken(refreshToken)
+                .id(user.getId()).build();
 
     }
 
