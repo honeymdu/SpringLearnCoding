@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.SpringLearnH2db.Entitys.User;
 import com.example.SpringLearnH2db.Services.JwtService;
+import com.example.SpringLearnH2db.Services.SessionService;
 import com.example.SpringLearnH2db.Services.UserService;
 
 import jakarta.servlet.ServletException;
@@ -26,6 +27,7 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final SessionService sessionService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -50,7 +52,8 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         User savedUser = userService.loadUserByEmail(email);
         String Accesstoken = jwtService.GenerateAccessToken(savedUser);
         String Refreshtoken = jwtService.GenerateRefreshToken(savedUser);
-
+        sessionService.GenerateNewSession(savedUser, Refreshtoken);
+        
         Cookie cookie = new Cookie("refreshToken", Refreshtoken);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
