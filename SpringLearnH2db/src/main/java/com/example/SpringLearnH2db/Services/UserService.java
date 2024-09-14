@@ -51,4 +51,12 @@ public class UserService implements UserDetailsService {
         .orElseThrow(() -> new ResourceNotFoundException("user not found with Id " + userId));
   }
 
+  public User loadUserByEmail(String email) {
+    return userRepoisitory.findByEmail(email).orElse(null);
+  }
+
+  public User save(User user) {
+    return userRepoisitory.save(user);
+  }
+
 }
