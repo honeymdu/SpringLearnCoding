@@ -2,7 +2,6 @@ package com.example.SpringLearnH2db.Services;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.Set;
 
 import javax.crypto.SecretKey;
 
@@ -28,7 +27,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("UserEmail", user.getEmail())
-                .claim("Roles", Set.of("ADMIN", "USER"))
+                .claim("Roles", user.getRoles().toString())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
                 .signWith(getSecretKey())

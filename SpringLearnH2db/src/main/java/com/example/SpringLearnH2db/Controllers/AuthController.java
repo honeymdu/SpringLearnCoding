@@ -49,16 +49,33 @@ public class AuthController {
 
   }
 
-  @PostMapping("/refreshToken")
-  public ResponseEntity<JwtTokenDto> refresh(HttpServletRequest request, HttpServletResponse response) {
+  // @PostMapping("/refreshv1")
+  // public ResponseEntity<JwtTokenDto> refreshv1(HttpServletRequest request) {
 
+  //   System.out.println(request.getCookies());
+  //   String refreshToken = Arrays.stream(request.getCookies())
+
+  //       .filter(cookie -> "refreshToken".equals(cookie.getName()))
+  //       .findFirst()
+  //       .map(Cookie::getValue)
+  //       .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found inside the cookies"));
+  //   JwtTokenDto jwtTokenDto = authService.refreshToken(refreshToken);
+  //   return ResponseEntity.ok(jwtTokenDto);
+  // }
+
+  @PostMapping("/refresh")
+  public ResponseEntity<?> refresh(HttpServletRequest request) {
+
+    //System.out.println(request.getCookies().toString());
     String refreshToken = Arrays.stream(request.getCookies())
+
         .filter(cookie -> "refreshToken".equals(cookie.getName()))
         .findFirst()
         .map(Cookie::getValue)
         .orElseThrow(() -> new AuthenticationServiceException("Refresh token not found inside the cookies"));
     JwtTokenDto jwtTokenDto = authService.refreshToken(refreshToken);
     return ResponseEntity.ok(jwtTokenDto);
+
   }
 
 }
